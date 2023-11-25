@@ -38,4 +38,41 @@
   $contact->add_message( $_POST['message'], 'Message', 10);
 
   echo $contact->send();
+
+
+  
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Replace contact@example.com with your real receiving email address
+    $receiving_email_address = 'elearning@icssnigeria.org';
+
+    // Create an instance of PHP_Email_Form
+    $contact = new PHP_Email_Form;
+
+    // Set properties from POST data
+    $contact->to = $receiving_email_address;
+    $contact->from_name = $_POST['name'];
+    $contact->from_email = $_POST['email'];
+    $contact->subject = $_POST['subject'];
+
+    // Add message content
+    $contact->add_message($_POST['name'], 'From');
+    $contact->add_message($_POST['email'], 'Email');
+    $contact->add_message($_POST['message'], 'Message', 10);
+// Attempt to send the email
+$sendResult = $contact->send();
+
+// Create a response array
+$response = array(
+    'success' => $sendResult, // Boolean indicating success or failure
+    'message' => $sendResult ? 'Email sent successfully!' : 'Error sending email. Please try again later.'
+);
+
+// Output the response as JSON
+header('Content-Type: application/json');
+echo json_encode($response);
+} else {
+// If the request method is not POST, return an error
+echo 'Invalid request method.';
+}
 ?>

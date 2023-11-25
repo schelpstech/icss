@@ -59,7 +59,7 @@
       if( response.ok ) {
         return response.text();
       } else {
-        return response.text();
+        throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
       }
     })
     .then(data => {
