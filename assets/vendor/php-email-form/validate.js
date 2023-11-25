@@ -57,13 +57,29 @@
     })
     .then(response => {
       if( response.ok ) {
-        let thisForm = document.querySelectorAll('.php-email-form');
-         thisForm.querySelector('.loading').classList.remove('d-block');
-        thisForm.querySelector('.sent-message').classList.add('d-block');
-        thisForm.reset(); 
+        return response.text();
       } else {
         throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
       }
     })
+    .then(data => {
+      thisForm.querySelector('.loading').classList.remove('d-block');
+      if (response.ok ) {
+        thisForm.querySelector('.sent-message').classList.add('d-block');
+        thisForm.reset(); 
+      } else {
+        throw new Error(data ? data : 'Form submission failed and no error message returned from: ' + action); 
+      }
+    })
+    .catch((error) => {
+      displayError(thisForm, error);
+    });
   }
+
+  function displayError(thisForm, error) {
+    thisForm.querySelector('.loading').classList.remove('d-block');
+    thisForm.querySelector('.error-message').innerHTML = error;
+    thisForm.querySelector('.error-message').classList.add('d-block');
+  }
+
 })();
