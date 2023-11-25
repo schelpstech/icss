@@ -56,7 +56,7 @@
       headers: {'X-Requested-With': 'XMLHttpRequest'}
     })
     .then(response => {
-      if( response == 1 ) {
+      if( response.ok ) {
         return response.text();
       } else {
         throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
